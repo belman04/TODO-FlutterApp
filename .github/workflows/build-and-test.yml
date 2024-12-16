@@ -1,0 +1,36 @@
+name: build-and-test
+
+on:
+  push:
+    branches:
+      - main # Ejecuta las acciones al hacer push en la rama 'main'
+  pull_request:
+    branches:
+      - main # Ejecuta las acciones en solicitudes de pull para la rama 'main'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Revisa el código del repositorio
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Configura Flutter en el entorno de ejecución
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.4' # Puedes especificar una versión específica
+
+      # 3. Instala las dependencias del proyecto
+      - name: Install dependencies
+        run: flutter pub get
+
+      # 4. Analiza el código en busca de errores o advertencias
+      - name: Analyze code
+        run: flutter analyze
+
+      # 5. Corre las pruebas del proyecto
+      - name: Run tests
+        run: flutter test
